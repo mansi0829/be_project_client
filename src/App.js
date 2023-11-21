@@ -1,23 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, useNavigate } from "react-router-dom";
+import "./App.css";
+import { Home } from "./Home";
+import Search from "./Search";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="font-nunito">
+      <div className="min-h-screen bg-gradient-to-r from-slate-900 via-gray-700 to-gray-800 text-gray-50">
+        <Routes>
+          <Route path="/search" element={<Search />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </div>
     </div>
   );
 }
