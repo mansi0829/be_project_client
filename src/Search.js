@@ -44,6 +44,7 @@ const Search = () => {
       Hi
       <ReactiveBase
         app="countries"
+        credentials="c84fb24cbe08:db2a25b5-1267-404f-b8e6-cf0754953c68"
         url="http://localhost:9200"
         theme={{
           colors: {

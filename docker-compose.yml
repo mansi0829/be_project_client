@@ -1,8 +1,9 @@
 version: '3'
 
+
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -13,7 +14,9 @@ services:
         hard: -1
     ports:
       - "9200:9200"
+    volumes:
+      - ./elasticsearch.yml:/home/mansi/mansi/be_project_client/elasticsearch.yml
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.1
+    image: docker.elastic.co/kibana/kibana:6.3.2
     ports:
       - "5601:5601"
