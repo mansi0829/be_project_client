@@ -27,7 +27,7 @@ const Home = (props) => {
                 </h1>
 
                 <p className="mt-4 text-lg text-gray-300">
-                  <Link to="/auth/login">
+                  <Link to="/login">
                     <button
                       className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-6 rounded"
                       type="submit"
