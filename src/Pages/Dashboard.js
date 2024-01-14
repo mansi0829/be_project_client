@@ -15,8 +15,8 @@ import {
   Button,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import { faUserPlus, faHammer, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, faHammer, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
 
 const projectsList = [
   { id: 1, name: "Project A", year: "1d ago", user: "abc" },
