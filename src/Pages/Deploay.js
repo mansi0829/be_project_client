@@ -40,7 +40,7 @@ export default function DeploymentPage() {
   };
 
   return (
-    <div className="px-8 h-screen">
+    <div className="px-8 min-h-screen">
       <div className="flex flex-wrap justify-center items-center mt-8 space-x-5 px-24">
         <div className="flex-1 max-w-80">
           <Card
@@ -182,13 +182,7 @@ export default function DeploymentPage() {
                   </Typography>
                   <Typography>
                     src/Component/Footer.js Line 10:15: The href attribute
-                    requires a valid value to be accessible. Provide a valid,
-                    navigable address as the href value. If you cannot provide a
-                    valid href, but still need the element to resemble a link,
-                    use a button and change it with appropriate styles. Learn
-                    more:
-                    https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md
-                    <br />
+                    requires a valid value to be accessible.s
                     'Grid' is defined but never used no-unused-vars Line 13:3:
                     'TableHead' is defined but never used no-unused-vars Line
                     69:9: 'handleLinkClick' is assigned a value but never used
