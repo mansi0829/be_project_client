@@ -4,19 +4,21 @@ import {
   CardContent,
   Typography,
   Divider,
-  Grid,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TextField,
-  TableHead,
   TableRow,
   Button,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus, faHammer, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUserPlus,
+  faHammer,
+  faUsersViewfinder,
+} from "@fortawesome/free-solid-svg-icons";
 
 const projectsList = [
   { id: 1, name: "Project A", year: "1d ago", user: "abc" },
@@ -30,7 +32,7 @@ const projectsList = [
 
 const UserDetailsCard = () => {
   return (
-    <Card elevation={3} className="mb-4">
+    <Card elevation={3} className="mb-4 bg-gray-900">
       <CardContent>
         <Typography variant="h6" className="pt-2 text-blue-500">
           Users Information
@@ -108,12 +110,12 @@ const Dashboard = () => {
 
   return (
     <div className="overflow-y-auto max-h-screen p-4 bg-gray-900">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center">
+      <div className="flex justify-between items-center mb-4 py-4">
+        <div className="flex items-center px-48">
           <img
             src={randomAvatarUrl}
             alt="Dashboard"
-            className="w-20 h-20 object-fill rounded-full"
+            className="w-16 h-16 object-fill rounded-full"
           />
           <div className="ml-3">
             <Typography variant="h5">Selina Kyle</Typography>
