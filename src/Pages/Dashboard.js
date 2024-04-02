@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -19,16 +19,7 @@ import {
   faHammer,
   faUsersViewfinder,
 } from "@fortawesome/free-solid-svg-icons";
-
-const projectsList = [
-  { id: 1, name: "Project A", year: "1d ago", user: "abc" },
-  { id: 2, name: "Project B", year: "39d ago", user: "xyz" },
-  { id: 3, name: "Project C", year: "45d ago", user: "pqr" },
-  { id: 4, name: "Project D", year: "784d ago", user: "xyz" },
-  { id: 5, name: "Project E", year: "22d ago", user: "pqr" },
-  { id: 6, name: "Project F", year: "36d ago", user: "xyz" },
-  { id: 7, name: "Project G", year: "100d ago", user: "xyz" },
-];
+import { Link } from "react-router-dom";
 
 const UserDetailsCard = () => {
   return (
@@ -107,7 +98,30 @@ const HouseholdVoterCard = () => {
 
 const Dashboard = () => {
   const randomAvatarUrl = `https://randomuser.me/api/portraits/women/2.jpg`;
+  const [projectsList, setProjectsList] = useState([]);
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(
+          "http://127.0.0.1:8000/github-user/mansi0829/repos/"
+        );
+        const data = await response.json();
+        setProjectsList(data.repos);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+  const calculateDaysAgo = (createdAt) => {
+    const createdAtDate = new Date(createdAt);
+    const currentDate = new Date();
+    const differenceInTime = currentDate.getTime() - createdAtDate.getTime();
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+    return differenceInDays;
+  };
   return (
     <div className="overflow-y-auto max-h-screen p-4 bg-gray-900">
       <div className="flex justify-between items-center mb-4 py-4">
@@ -177,15 +191,28 @@ const Dashboard = () => {
                   <Table className="w-full">
                     <TableBody>
                       {projectsList.map((project) => (
-                        <TableRow key={project.id}>
-                          <TableCell>{project.id}</TableCell>
+                        <TableRow key={project.name}>
                           <TableCell>
-                            {project.name} <sub>{project.year}</sub>
+                            {project.name}
+                            <sub>
+                              {" "}
+                              {calculateDaysAgo(project.created_at)} days ago
+                            </sub>
                           </TableCell>
+
+                          <TableCell>{project.language}</TableCell>
+                          {/* <TableCell>
+                            {new Date(project.created_at).toLocaleDateString()}
+                          </TableCell> */}
+                          {/* <TableCell>
+                            {new Date(project.updated_at).toLocaleDateString()}
+                          </TableCell> */}
                           <TableCell>
-                            <Button variant="contained" color="primary">
-                              Import
-                            </Button>
+                            <Link to={`/service/${project.name}`}>
+                              <Button variant="contained" color="primary">
+                                Import
+                              </Button>
+                            </Link>
                           </TableCell>
                         </TableRow>
                       ))}

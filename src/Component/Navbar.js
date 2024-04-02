@@ -43,12 +43,12 @@ const NavBar = (props) => {
                 </Link>
               </li>
               <li className=" md:border-none px-2 hover:text-gray-400">
-                <Link
+                {/* <Link
                   to="/deploy"
                   className="block md:inline-block px-1  py-3 no-underline text-grey-darkest hover:text-grey-darker font-bold"
                 >
                   Deploy
-                </Link>
+                </Link> */}
               </li>
 
               <li className=" md:border-none px-2  hover:text-gray-400">

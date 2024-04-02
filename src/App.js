@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Deploay from "./Pages/Deploay";
 import Dashboard from "./Pages/Dashboard";
 import Contact from "./Pages/Contact";
+import Creation from "./Pages/Creation";
 
 function App() {
   return (
@@ -18,9 +19,10 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/search" element={<Search />} />
-          <Route path="/deploy" element={<Deploay />} />
+          <Route path="/service/:id/deploy/:id" element={<Deploay />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/service/:id" element={<Creation />}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />

@@ -38,3 +38,12 @@ export const getCustomers = async () => {
     throw error;
   }
 };
+
+export const getProjectsList = async () => {
+  try {
+    const response = await backend.get("http://127.0.0.1:8000/github-user/devrajshetake/repos/");
+    return response.data.repos;
+  } catch (error) {
+    throw error;
+  }
+};
