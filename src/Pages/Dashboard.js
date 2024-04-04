@@ -97,7 +97,7 @@ const HouseholdVoterCard = () => {
 };
 
 const Dashboard = () => {
-  const randomAvatarUrl = `https://randomuser.me/api/portraits/women/2.jpg`;
+  const randomAvatarUrl = `https://avatars.githubusercontent.com/u/81025790?s=400&v=4`;
   const [projectsList, setProjectsList] = useState([]);
 
   useEffect(() => {
@@ -132,9 +132,9 @@ const Dashboard = () => {
             className="w-16 h-16 object-fill rounded-full"
           />
           <div className="ml-3">
-            <Typography variant="h5">Selina Kyle</Typography>
+            <Typography variant="h5">Mansi Gundre</Typography>
             <Typography variant="subtitle1" className="text-gray-600">
-              Admin
+              mansi0829
             </Typography>
           </div>
         </div>

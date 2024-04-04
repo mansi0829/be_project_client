@@ -26,6 +26,10 @@ const Creation = () => {
   const [repoData, setRepoData] = useState("");
   const [tabValue, setTabValue] = useState(0); // State to manage selected tab
   const [isCopied, setIsCopied] = useState(false); // State to manage copy notification
+  const [providerName, setProviderName] = useState("");
+  const [regionName, setRegionName] = useState("");
+  const [publicIP, setPublicIP] = useState("");
+  const [port, setPort] = useState(22);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -48,15 +52,45 @@ const Creation = () => {
   };
 
   const handleCopyToClipboard = () => {
-    // Execute logic to copy the command to clipboard
     navigator.clipboard.writeText(
-      "curl https://raw.githubusercontent.com/elestio/byovm/main/prod.sh | sudo bash"
+      "curl https://raw.githubusercontent.com/devrajshetake/be-project-jenkins/main/add_key.sh | sudo bash"
     );
-    setIsCopied(true); // Show copy notification
+    setIsCopied(true);
   };
 
   const handleCloseSnackbar = () => {
-    setIsCopied(false); // Hide copy notification
+    setIsCopied(false);
+  };
+  const [vmData, setVmData] = useState([]);
+  const [vmMsg, setVmMsg] = useState("");
+
+  const handleVMTest = async () => {
+    try {
+      const dataToSend = {
+        public_ip: publicIP,
+        provider: providerName,
+        region: regionName,
+        user: 1,
+      };
+
+      const response = await fetch(`http://127.0.0.1:8000/automation/vms/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        setVmMsg("success");
+      } else {
+        setVmMsg("failure");
+      }
+    } catch (error) {
+      console.error("Error sending VM test data:", error);
+    }
   };
 
   return (
@@ -75,13 +109,15 @@ const Creation = () => {
               aria-label="icon label tabs example"
             >
               <Tab icon={<FontAwesomeIcon icon={faDesktop} />} label="Own VM" />
-              <Tab icon={<FontAwesomeIcon icon={faServer} />} label="New VM" />
+              <Tab
+                icon={<FontAwesomeIcon icon={faServer} />}
+                label="Deploy VM"
+              />
               <Tab icon={<FontAwesomeIcon icon={faCloud} />} label="AWS" />
-              <Tab icon={<FontAwesomeIcon icon={faCloud} />} label="Azure" />
-              <Tab icon={<FontAwesomeIcon icon={faCube} />} label="GCP" />
+              {/* <Tab icon={<FontAwesomeIcon icon={faCloud} />} label="Azure" /> */}
+              {/* <Tab icon={<FontAwesomeIcon icon={faCube} />} label="GCP" />s */}
             </Tabs>
             <div style={{ padding: "20px", borderTop: "1px solid #ccc" }}>
-              {/* Content based on selected tab */}
               {tabValue === 0 && (
                 <div>
                   <div className="items-center border flex gap-x-1 p-2 my-2 mb-2">
@@ -99,21 +135,33 @@ const Creation = () => {
                   </Typography>
                   <div className="flex gap-x-2">
                     <TextField
+                      id="providerName"
                       label="Enter Provider Name"
                       variant="outlined"
                       fullWidth
+                      onChange={(event) => setProviderName(event.target.value)}
                     />
                     <TextField
+                      id="regionName"
                       label="Enter Region Name"
                       variant="outlined"
                       fullWidth
+                      onChange={(event) => setRegionName(event.target.value)}
                     />
                     <TextField
+                      id="publicIP"
                       label="Ex: 65.8.249.80"
                       variant="outlined"
                       fullWidth
+                      onChange={(event) => setPublicIP(event.target.value)}
                     />
-                    <TextField label="Port" value={22} variant="outlined" />
+                    <TextField
+                      id="port"
+                      label="Port"
+                      value={port}
+                      variant="outlined"
+                      onChange={(event) => setPort(event.target.value)}
+                    />
                   </div>
                   <div className="items-center border flex gap-x-1 p-2 my-4">
                     <InfoOutlinedIcon /> Allow our public key provided below on
@@ -134,10 +182,19 @@ const Creation = () => {
                       <FontAwesomeIcon icon={faCopy} />
                     </IconButton>
                   </div>
+                  {vmMsg === "success" && (
+                    <Typography color="success" className="text-green-500">
+                      VM Tested Successfully
+                    </Typography>
+                  )}
+                  {vmMsg === "failure" && (
+                    <Typography color="error">VM Test Failed</Typography>
+                  )}
                   <Button
                     variant="contained"
                     color="primary"
                     style={{ marginTop: "20px" }}
+                    onClick={handleVMTest}
                   >
                     Test my VM
                   </Button>
@@ -155,10 +212,14 @@ const Creation = () => {
               )}
               {tabValue === 1 && (
                 <div>
-                  <Typography variant="body1" align="center">
-                    Content for "Use new VM" tab
-                  </Typography>
-                  {/* Add your content here */}
+                  <Typography>Deploy with VM</Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginTop: "20px" }}
+                  >
+                    Deploy
+                  </Button>
                 </div>
               )}
             </div>
