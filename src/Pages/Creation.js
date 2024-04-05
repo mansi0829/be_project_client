@@ -36,12 +36,14 @@ const Creation = () => {
 
   const [isLoadingDetails, setLoadingDetails] = useState(true);
   const [deploymentProgress, setDeploymentProgress] = useState(0);
+  const [deploymentError, setDeploymentError] = useState(false); // State to manage deployment error
+
   const simulateDeployment = () => {
     setLoadingLogs(true);
 
     const interval = setInterval(() => {
       setDeploymentProgress((prevProgress) =>
-        prevProgress >= 100 ? 100 : prevProgress + 10
+        prevProgress >= 50 ? 50 : prevProgress + 10
       );
     }, 1000);
 
@@ -49,6 +51,10 @@ const Creation = () => {
       clearInterval(interval);
       setLoadingLogs(false);
       setLoadingDetails(false);
+      if (deploymentProgress < 51) {
+        // Set deployment error if progress is less than 50%
+        setDeploymentError(true);
+      }
     }, 10000);
   };
 
@@ -224,6 +230,15 @@ const Creation = () => {
                         <Typography variant="body1" align="center">
                           Deploying... {deploymentProgress}%
                         </Typography>
+                        {deploymentError && (
+                          <Typography
+                            variant="body1"
+                            align="center"
+                            color="error"
+                          >
+                            Deployment Failed! Retry
+                          </Typography>
+                        )}
                       </div>
                       {/* )} */}
                     </div>
