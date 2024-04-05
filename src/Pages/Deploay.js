@@ -11,10 +11,12 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import LinearProgress from "@mui/material/LinearProgress";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"; // Correct import
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 export default function DeploymentPage() {
   const { id } = useParams();
+  const location = useLocation();
+  const vmData = location.state?.vmData || []; 
   const [isLoadingLogs, setLoadingLogs] = useState(false);
   const [logData, setLogData] = useState([]);
 
@@ -40,6 +42,7 @@ export default function DeploymentPage() {
   const handleViewLogsClick = () => {
     simulateDeployment();
   };
+
   const [repoData, setRepoData] = useState("");
   useEffect(() => {
     const fetchProjects = async () => {
@@ -53,6 +56,7 @@ export default function DeploymentPage() {
         console.error("Error fetching projects:", error);
       }
     };
+    console.log(vmData)
 
     fetchProjects();
   }, []);
@@ -165,62 +169,7 @@ export default function DeploymentPage() {
             Deployment Details
           </Typography>
           <div className="w-full max-w-screen-sm">
-            <button className="w-full border-b-2 border-gray-300 pb-6 text-left group mt-6 focus:outline-none">
-              <div className="text-lg font-semibold">Building</div>
-              <div className="mt-3 hidden text-gray-300 group-focus:flex">
-                <p>
-                  <LinearProgress variant="determinate" value={59} />
-                  <Typography variant="body1" paragraph>
-                    All Logs (109)
-                  </Typography>
-                  <Typography variant="body1">Errors (0)</Typography>
-                  <Typography variant="body1">Warnings (0)</Typography>
-                  <Typography variant="body1">
-                    Running build in Washington, D.C., USA (East) – iad1
-                  </Typography>
-                  <Typography variant="body1">
-                    Cloning github.com/mansi0829/be_project_client (Branch:
-                    main, Commit: 587c968)
-                  </Typography>
-                  <Typography variant="body1">
-                    Previous build cache not available
-                  </Typography>
-                  <Typography variant="body1">
-                    Cloning completed: 556.163ms
-                  </Typography>
-                  <Typography variant="body1">
-                    Running "vercel build"
-                  </Typography>
-                  <Typography variant="body1">Vercel CLI 33.1.0</Typography>
-                  <Typography variant="body1">
-                    Running "install" command: `npm install
-                    --legacy-peer-deps`...
-                  </Typography>
-                  <Typography>
-                    src/Component/Footer.js Line 10:15: The href attribute
-                    requires a valid value to be accessible.s 'Grid' is defined
-                    but never used no-unused-vars Line 13:3: 'TableHead' is
-                    defined but never used no-unused-vars Line 69:9:
-                    'handleLinkClick' is assigned a value but never used
-                    no-unused-vars src/Pages/Deploay.js Line 13:3: 'Divider' is
-                    defined but never used no-unused-vars Search for the
-                    keywords to learn more about each warning. To ignore, add //
-                    eslint-disable-next-line to the line before.
-                  </Typography>
-                </p>
-              </div>
-            </button>
-            <button className="w-full border-b-2 border-gray-300 pb-6 text-left group mt-6 focus:outline-none">
-              <div className="text-lg font-semibold">Deployment Summary</div>
-              <div className="mt-3 hidden text-gray-700 group-focus:flex">
-                <p>
-                  <LinearProgress variant="determinate" value={90} />
-                  <Typography variant="body1" paragraph>
-                    Create React App (5.0.1)
-                  </Typography>
-                </p>
-              </div>
-            </button>
+            {vmData.ram}
           </div>
         </Paper>
       )}

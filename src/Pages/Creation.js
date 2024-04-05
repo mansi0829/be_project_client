@@ -83,6 +83,7 @@ const Creation = () => {
 
       if (response.ok) {
         const data = await response.json();
+        setVmData(data);
         console.log(data);
         setVmMsg("success");
       } else {
@@ -185,6 +186,10 @@ const Creation = () => {
                   {vmMsg === "success" && (
                     <Typography color="success" className="text-green-500">
                       VM Tested Successfully
+                      <p>Ram: {vmData.ram}</p>
+                      <p>CPU: {vmData.cpus}</p>
+                      <p>Architecture: {vmData.architecture}</p>
+                      <p>Memory: {vmData.memory}</p>
                     </Typography>
                   )}
                   {vmMsg === "failure" && (
@@ -199,7 +204,7 @@ const Creation = () => {
                     Test my VM
                   </Button>
                   <i className="px-2"></i>
-                  <Link to={`deploy/${id}`}>
+                  <Link to={{ pathname: `deploy/${id}`, state: { vmData } }}>
                     <Button
                       variant="contained"
                       color="primary"
