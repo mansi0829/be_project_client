@@ -20,6 +20,7 @@ import {
   Snackbar,
 } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import LinearProgress from "@mui/material/LinearProgress";
 
 const Creation = () => {
   const { id } = useParams();
@@ -30,6 +31,26 @@ const Creation = () => {
   const [regionName, setRegionName] = useState("");
   const [publicIP, setPublicIP] = useState("");
   const [port, setPort] = useState(22);
+  const [isLoadingLogs, setLoadingLogs] = useState(false);
+  const [logData, setLogData] = useState([]);
+
+  const [isLoadingDetails, setLoadingDetails] = useState(true);
+  const [deploymentProgress, setDeploymentProgress] = useState(0);
+  const simulateDeployment = () => {
+    setLoadingLogs(true);
+
+    const interval = setInterval(() => {
+      setDeploymentProgress((prevProgress) =>
+        prevProgress >= 100 ? 100 : prevProgress + 10
+      );
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      setLoadingLogs(false);
+      setLoadingDetails(false);
+    }, 10000);
+  };
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -85,6 +106,7 @@ const Creation = () => {
         const data = await response.json();
         setVmData(data);
         console.log(data);
+        simulateDeployment();
         setVmMsg("success");
       } else {
         setVmMsg("failure");
@@ -184,13 +206,27 @@ const Creation = () => {
                     </IconButton>
                   </div>
                   {vmMsg === "success" && (
-                    <Typography color="success" className="text-green-500">
-                      VM Tested Successfully
-                      <p>Ram: {vmData.ram}</p>
-                      <p>CPU: {vmData.cpus}</p>
-                      <p>Architecture: {vmData.architecture}</p>
-                      <p>Memory: {vmData.memory}</p>
-                    </Typography>
+                    <div>
+                      <Typography color="success" className="text-green-500">
+                        VM Tested Successfully
+                        <p>Ram: {vmData.ram}</p>
+                        <p>CPU: {vmData.cpus}</p>
+                        <p>Architecture: {vmData.architecture}</p>
+                        <p>Memory: {vmData.memory}</p>
+                      </Typography>
+                      {/* {isLoadingLogs && ( */}
+                      <div className="mt-8 mx-12">
+                        <LinearProgress
+                          variant="determinate"
+                          value={deploymentProgress}
+                          sx={{ height: 40 }}
+                        />
+                        <Typography variant="body1" align="center">
+                          Deploying... {deploymentProgress}%
+                        </Typography>
+                      </div>
+                      {/* )} */}
+                    </div>
                   )}
                   {vmMsg === "failure" && (
                     <Typography color="error">VM Test Failed</Typography>
