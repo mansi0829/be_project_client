@@ -222,15 +222,15 @@ const Creation = () => {
                       </Typography>
                       {/* {isLoadingLogs && ( */}
                       <div className="mt-8 mx-12">
-                        <LinearProgress
+                        {/* <LinearProgress
                           variant="determinate"
                           value={deploymentProgress}
                           sx={{ height: 40 }}
                         />
                         <Typography variant="body1" align="center">
                           Deploying... {deploymentProgress}%
-                        </Typography>
-                        {deploymentError && (
+                        </Typography> */}
+                        {/* {deploymentError && (
                           <Typography
                             variant="body1"
                             align="center"
@@ -238,9 +238,8 @@ const Creation = () => {
                           >
                             Deployment Failed! Retry
                           </Typography>
-                        )}
+                        )} */}
                       </div>
-                      {/* )} */}
                     </div>
                   )}
                   {vmMsg === "failure" && (
@@ -255,7 +254,16 @@ const Creation = () => {
                     Test my VM
                   </Button>
                   <i className="px-2"></i>
-                  <Link to={{ pathname: `deploy/${id}`, state: { vmData } }}>
+                  <Link
+                    to={{
+                      pathname: `deploy/${id}`,
+                      state: {
+                        vmData: {
+                          public_ip: publicIP, 
+                        },
+                      },
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="primary"

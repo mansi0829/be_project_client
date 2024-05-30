@@ -11,17 +11,21 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import LinearProgress from "@mui/material/LinearProgress";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder"; // Correct import
+import TextField from "@mui/material/TextField"; // Add this import
 import { useParams, useLocation } from "react-router-dom";
 
 export default function DeploymentPage() {
   const { id } = useParams();
   const location = useLocation();
-  const vmData = location.state?.vmData || []; 
+  const vmData = location.state?.vmData || [];
+  const { public_ip: publicIP } = vmData;
   const [isLoadingLogs, setLoadingLogs] = useState(false);
   const [logData, setLogData] = useState([]);
 
   const [isLoadingDetails, setLoadingDetails] = useState(true);
   const [deploymentProgress, setDeploymentProgress] = useState(0);
+
+  const [siteName, setSiteName] = useState(""); // State for site name input
 
   const simulateDeployment = () => {
     setLoadingLogs(true);
@@ -43,6 +47,40 @@ export default function DeploymentPage() {
     simulateDeployment();
   };
 
+  const [logs, setLogs] = useState([]);
+  const [deployLink, setDeployLink] = useState("")
+
+  const deploy = async () => {
+    try {
+      const url = "http://127.0.0.1:8000/automation/deploy_site/";
+      const data = {
+        git_url: `https://github.com/devrajshetake/${id}`,
+        public_ip: "4.227.182.7",
+        site_name: siteName, 
+      };
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Deployment successful:", responseData.logs);
+        setLogs(responseData.logs);
+        setDeployLink(responseData.site_url);
+        handleViewLogsClick();
+      } else {
+        console.error("Deployment failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error during deployment:", error);
+    }
+  };
+
   const [repoData, setRepoData] = useState("");
   useEffect(() => {
     const fetchProjects = async () => {
@@ -56,10 +94,11 @@ export default function DeploymentPage() {
         console.error("Error fetching projects:", error);
       }
     };
-    console.log(vmData)
+    console.log(vmData);
 
     fetchProjects();
   }, []);
+  
 
   return (
     <div className="px-8 min-h-screen">
@@ -150,6 +189,20 @@ export default function DeploymentPage() {
         </div>
       </div>
 
+      {/* TextField for site name input */}
+      <div className="flex justify-center mt-8">
+        <TextField
+          label="Site Name"
+          variant="outlined"
+          value={siteName}
+          onChange={(e) => setSiteName(e.target.value)}
+        />
+        <i className="px-3"></i>
+        <Button variant="contained" color="primary" onClick={deploy}>
+          Deploy
+        </Button>
+      </div>
+
       {isLoadingLogs && (
         <div className="mt-52 mx-12">
           <LinearProgress
@@ -168,9 +221,7 @@ export default function DeploymentPage() {
           <Typography variant="h6" gutterBottom color="">
             Deployment Details
           </Typography>
-          <div className="w-full max-w-screen-sm">
-            {vmData.ram}
-          </div>
+          <div className="w-full max-w-screen-sm"><pre>{logs} your site is live at <a href={deployLink} target="_blank">{deployLink}</a>✨</pre></div>
         </Paper>
       )}
     </div>
