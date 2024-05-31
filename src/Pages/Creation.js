@@ -38,25 +38,8 @@ const Creation = () => {
   const [deploymentProgress, setDeploymentProgress] = useState(0);
   const [deploymentError, setDeploymentError] = useState(false); // State to manage deployment error
 
-  const simulateDeployment = () => {
-    setLoadingLogs(true);
-
-    const interval = setInterval(() => {
-      setDeploymentProgress((prevProgress) =>
-        prevProgress >= 50 ? 50 : prevProgress + 10
-      );
-    }, 1000);
-
-    setTimeout(() => {
-      clearInterval(interval);
-      setLoadingLogs(false);
-      setLoadingDetails(false);
-      if (deploymentProgress < 51) {
-        // Set deployment error if progress is less than 50%
-        setDeploymentError(true);
-      }
-    }, 10000);
-  };
+  const [vmData, setVmData] = useState([]);
+  const [vmMsg, setVmMsg] = useState("");
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -88,8 +71,6 @@ const Creation = () => {
   const handleCloseSnackbar = () => {
     setIsCopied(false);
   };
-  const [vmData, setVmData] = useState([]);
-  const [vmMsg, setVmMsg] = useState("");
 
   const handleVMTest = async () => {
     try {
@@ -120,6 +101,26 @@ const Creation = () => {
     } catch (error) {
       console.error("Error sending VM test data:", error);
     }
+  };
+
+  const simulateDeployment = () => {
+    setLoadingLogs(true);
+
+    const interval = setInterval(() => {
+      setDeploymentProgress((prevProgress) =>
+        prevProgress >= 50 ? 50 : prevProgress + 10
+      );
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(interval);
+      setLoadingLogs(false);
+      setLoadingDetails(false);
+      if (deploymentProgress < 51) {
+        // Set deployment error if progress is less than 50%
+        setDeploymentError(true);
+      }
+    }, 10000);
   };
 
   return (
@@ -220,26 +221,27 @@ const Creation = () => {
                         <p>Architecture: {vmData.architecture}</p>
                         <p>Memory: {vmData.memory}</p>
                       </Typography>
-                      {/* {isLoadingLogs && ( */}
                       <div className="mt-8 mx-12">
-                        {/* <LinearProgress
-                          variant="determinate"
-                          value={deploymentProgress}
-                          sx={{ height: 40 }}
-                        />
-                        <Typography variant="body1" align="center">
-                          Deploying... {deploymentProgress}%
-                        </Typography> */}
-                        {/* {deploymentError && (
-                          <Typography
-                            variant="body1"
-                            align="center"
-                            color="error"
-                          >
-                            Deployment Failed! Retry
-                          </Typography>
-                        )} */}
+                        {/* Progress and error display code */}
                       </div>
+                      <Link
+                        to={{
+                          pathname: `deploy/${id}`,
+                          state: {
+                            vmData: {
+                              public_ip: publicIP, 
+                            },
+                          },
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          style={{ marginTop: "20px" }}
+                        >
+                          Deploy
+                        </Button>
+                      </Link>
                     </div>
                   )}
                   {vmMsg === "failure" && (
@@ -253,25 +255,7 @@ const Creation = () => {
                   >
                     Test my VM
                   </Button>
-                  <i className="px-2"></i>
-                  <Link
-                    to={{
-                      pathname: `deploy/${id}`,
-                      state: {
-                        vmData: {
-                          public_ip: publicIP, 
-                        },
-                      },
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={{ marginTop: "20px" }}
-                    >
-                      Deploy
-                    </Button>
-                  </Link>
+                  {isLoadingLogs && <i className="px-2"></i>}
                 </div>
               )}
               {tabValue === 1 && (
